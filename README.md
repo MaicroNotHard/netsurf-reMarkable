@@ -1,13 +1,36 @@
-# NetSurf-reMarkable [![Build for reMarkable](https://github.com/alex0809/netsurf-reMarkable/actions/workflows/build.yml/badge.svg)](https://github.com/alex0809/netsurf-reMarkable/actions/workflows/build.yml)[![rm1](https://img.shields.io/badge/rM1-supported-green)](https://remarkable.com/store/remarkable)[![rm2](https://img.shields.io/badge/rM2-supported-green)](https://remarkable.com/store/remarkable-2)[![opkg](https://img.shields.io/badge/OPKG-netsurf-blue)](https://toltec-dev.org/)
+# NetSurf-reMarkable [![Build for reMarkable](https://github.com/MaicroNotHard/netsurf-reMarkable/actions/workflows/build.yml/badge.svg)](https://github.com/MaicroNotHard/netsurf-reMarkable/actions/workflows/build.yml)[![rm1](https://img.shields.io/badge/rM1-supported-green)](https://remarkable.com/store/remarkable)[![rm2](https://img.shields.io/badge/rM2-supported-green)](https://remarkable.com/store/remarkable-2)[![opkg](https://img.shields.io/badge/OPKG-netsurf-blue)](https://toltec-dev.org/)
 
-> **_NOTE:_**  I no longer own a reMarkable, so I'm not continuing to maintain this repository, as I can't validate any changes.
+> **_NOTE:_**  The original author (alex0809) no longer owns a reMarkable and is no longer maintaining the upstream repository, as they can't validate changes. This fork is maintained by MaicroNotHard.
 
 NetSurf is a lightweight and portable open-source web browser. This project adapts NetSurf for the reMarkable E Ink tablet.
 This repository contains the code for to building and releasing new versions.
 
 ## Installation
 
-### Toltec
+### Vellum (recommended)
+
+[Vellum](https://github.com/vellum-dev/vellum) is the actively maintained package manager for the reMarkable. A VELBUILD recipe for NetSurf (built from this fork, with fonts fetched from upstream DejaVu releases at build time) lives in [MaicroNotHard/vellum](https://github.com/MaicroNotHard/vellum) under `packages/netsurf`.
+
+Until the package is published in the official Vellum index, build and sideload it yourself:
+
+```
+git clone https://github.com/MaicroNotHard/vellum
+cd vellum
+./scripts/build-package.sh netsurf armv7
+```
+
+Copy the resulting `dist/armv7/netsurf-*.apk` to the device and install it with [vellum-cli](https://github.com/vellum-dev/vellum-cli):
+
+```
+scp dist/armv7/netsurf-*.apk root@10.11.99.1:/tmp/
+ssh root@10.11.99.1 /home/root/.vellum/bin/vellum add --allow-untrusted /tmp/netsurf-*.apk
+```
+
+Once the package is published in the index, installation will simply be `vellum install netsurf`.
+
+### Toltec (legacy)
+
+> **_NOTE:_** This install path predates the Vellum recipe above and has not been tested against this fork recently - it's kept here for historical reference. We recommend installing via Vellum.
 
 You can install neturf with [Toltec](https://toltec-dev.org) using the following command:
 
