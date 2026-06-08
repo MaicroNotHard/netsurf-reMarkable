@@ -33,7 +33,11 @@ cd $TARGET_WORKSPACE/netsurf/
 # Would probably be nicer to to pkg_config libevdev in the netsurf Makefile,
 # but we are re-pulling that Makefile every build.
 # This works for now.
-export LDFLAGS="$LDFLAGS -levdev -lpthread"
+# --whole-archive pulls in all of static libevdev regardless of where the
+# linker places -levdev relative to libnsfb (which references it); without it
+# the link fails with undefined references to libevdev_* now that libevdev is
+# statically linked rather than resolved from a shared lib.
+export LDFLAGS="$LDFLAGS -Wl,--whole-archive -levdev -Wl,--no-whole-archive -lpthread"
 
 export CC="arm-remarkable-linux-gnueabihf-gcc"
 export STRIP="arm-remarkable-linux-gnueabihf-strip"
