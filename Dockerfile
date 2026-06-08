@@ -28,6 +28,9 @@ ADD scripts/install_dependencies.sh install_dependencies.sh
 # SSL_get_peer_certificate/EVP_PKEY_id/..." (symbol names changed between
 # OpenSSL 1.1.x and 3.x). Remove the prebuilt shared libs up front so
 # nothing ever links against them.
+# libevdev.so* is removed for the same reason: install_dependencies.sh builds
+# a static libevdev, but the sysroot also ships a prebuilt libevdev.so.2 that
+# the linker would otherwise prefer.
 RUN rm -f "$SYSROOT"/usr/lib/libssl.so* "$SYSROOT"/usr/lib/libcrypto.so* \
-        "$SYSROOT"/usr/lib/libcurl.so* \
+        "$SYSROOT"/usr/lib/libcurl.so* "$SYSROOT"/usr/lib/libevdev.so* \
     && ./install_dependencies.sh

@@ -78,3 +78,19 @@ export DEBIAN_FRONTEND=noninteractive \
     && make install \
     && cd .. \
     && rm -rf libjpeg-turbo || exit 1
+
+# Build libevdev 1.13.6 (statically linked into the netsurf binary; the
+# device ships no libevdev.so.2)
+export DEBIAN_FRONTEND=noninteractive \
+    && mkdir libevdev \
+    && cd libevdev \
+    && curl -L "https://www.freedesktop.org/software/libevdev/libevdev-1.13.6.tar.xz" -o libevdev.tar.xz \
+    && echo "73f215eccbd8233f414737ac06bca2687e67c44b97d2d7576091aa9718551110  libevdev.tar.xz" > sha256sums \
+    && sha256sum -c sha256sums \
+    && tar --strip-components=1 -xf libevdev.tar.xz \
+    && rm libevdev.tar.xz sha256sums \
+    && ./configure --prefix=/usr --host="$CHOST" --enable-static --disable-shared \
+    && make -j $(nproc) \
+    && DESTDIR="$SYSROOT" make install \
+    && cd .. \
+    && rm -rf libevdev || exit 1
