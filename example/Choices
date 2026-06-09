@@ -15,6 +15,7 @@ fb_face_cursive:/opt/share/fonts/ttf-dejavu/DejaVuSerif-Italic.ttf
 fb_face_monospace:/opt/share/fonts/ttf-dejavu/DejaVuSansMono.ttf
 fb_face_monospace_bold:/opt/share/fonts/ttf-dejavu/DejaVuSansMono-Bold.ttf
 fb_face_fantasy:/opt/share/fonts/ttf-dejavu/DejaVuSans-Oblique.ttf
+fb_face_cjk:NotoSansCJKsc-Regular.otf
 
 fb_toolbar_size:60
 fb_furniture_size:40
