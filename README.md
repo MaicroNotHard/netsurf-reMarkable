@@ -82,10 +82,10 @@ The resulting netsurf binary is `build/netsurf/nsfb`.
 `make install` to build and then install the updated binary to the device.
 This will use `scp` to copy the binary and required files to the device.
 Device address used is by default `10.11.99.1` (i.e. reMarkable connected to your PC via USB), but can be overridden with the `INSTALL_DESTINATION` variable.
-The netsurf binary will be copied to `~/netsurf`, and the required resources are copied to `~/.netsurf`.
+The netsurf binary and resources are copied into the installed app directory `/home/root/xovi/exthome/appload/netsurf/` (matching where the Vellum package installs them); the existing binary is backed up to `netsurf.bak`. `make uninstall` restores that backup.
 
-The font files defined in the configuration file `~/.netsurf/Choices` must exist.
-You can either install the pre-configured fonts via opkg, or copy your own preferred fonts to the device and adapt the `Choices` file.
+The font files defined in the configuration file `res/Choices` must exist on the device.
+Install the NetSurf Vellum package first so its fonts are present under the app dir's `res/fonts/`, or copy your own fonts there and adapt `Choices`.
 
 Installation of pre-configured fonts:
 ```
@@ -106,6 +106,9 @@ To use clangd language server, you can run `make clangd-build`, which will prepa
 clangd and compile-commands set up.
 After the build is complete, you can can start the container with `make clangd-start`, and access with
 [clangd_docker.sh](scripts/clangd_docker.sh).
+
+For running a locally-built binary on the tablet and capturing before/after
+screenshots, see [docs/on-device-testing.md](docs/on-device-testing.md).
 
 ## Related repositories
 
