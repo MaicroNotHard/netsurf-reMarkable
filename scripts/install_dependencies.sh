@@ -18,35 +18,10 @@ export DEBIAN_FRONTEND=noninteractive \
     && cd .. \
     && rm -rf libiconv || exit 1
 
-# Build openssl 1.1.1k
-export DEBIAN_FRONTEND=noninteractive \
-    && mkdir openssl \
-    && cd openssl \
-    && curl -L https://www.openssl.org/source/openssl-1.1.1k.tar.gz -o openssl.tar.gz \
-    && echo "892a0875b9872acd04a9fde79b1f943075d5ea162415de3047c327df33fbaee5  openssl.tar.gz" > sha256sums \
-    && sha256sum -c sha256sums \
-    && tar --strip-components=1 -xf openssl.tar.gz \
-    && rm openssl.tar.gz sha256sums \
-    && ./Configure no-shared no-comp --prefix=$SYSROOT/usr --openssldir=$SYSROOT/usr --cross-compile-prefix=$CHOST- linux-armv4 \
-    && make -j $(nproc) \
-    && DESTDIR="$SYSROOT" make install \
-    && cd .. \
-    && rm -rf openssl || exit 1
-
-# Build curl 7.75.0
-export DEBIAN_FRONTEND=noninteractive \
-    && mkdir curl \
-    && cd curl \
-    && curl https://curl.se/download/curl-7.75.0.tar.gz -o curl.tar.gz \
-    && echo "4d51346fe621624c3e4b9f86a8fd6f122a143820e17889f59c18f245d2d8e7a6  curl.tar.gz" > sha256sums \
-    && sha256sum -c sha256sums \
-    && tar --strip-components=1 -xf curl.tar.gz \
-    && rm curl.tar.gz sha256sums \
-    && ./configure --prefix=/usr --host="$CHOST" --enable-static --disable-shared --with-openssl --with-ca-bundle=/etc/ssl/certs/ca-certificates.crt \
-    && make -j $(nproc) \
-    && DESTDIR="$SYSROOT" make install \
-    && cd .. \
-    && rm -rf curl || exit 1
+# OpenSSL and curl are not built here: the toolchain sysroot already ships
+# OpenSSL 3.x and curl (shared libs, headers and pkg-config files), which
+# NetSurf picks up via pkg-config and links against dynamically. The device
+# provides matching libssl.so.3/libcrypto.so.3/libcurl.so.4 at runtime.
 
 # Build FreeType 2.10.4
 export DEBIAN_FRONTEND=noninteractive \
