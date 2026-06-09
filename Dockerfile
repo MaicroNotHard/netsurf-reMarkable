@@ -18,19 +18,8 @@ RUN apt-get update -y && apt-get install -y bison flex libexpat1-dev libpng-dev 
 
 ADD scripts/install_dependencies.sh install_dependencies.sh
 
-# The toolchain sysroot ships prebuilt shared libs for OpenSSL 3.x
-# (libssl.so.3/libcrypto.so.3) and curl (libcurl.so.4, linked against that
-# same OpenSSL 3.x). install_dependencies.sh cross-builds static OpenSSL
-# 1.1.1k and curl 7.75.0 into the same prefix (--disable-shared, so no new
-# .so files are produced; only headers/.a libs are (re)written) - but the
-# linker still finds and prefers the preexisting prebuilt .so's over the
-# freshly built .a's, causing "undefined reference to
-# SSL_get_peer_certificate/EVP_PKEY_id/..." (symbol names changed between
-# OpenSSL 1.1.x and 3.x). Remove the prebuilt shared libs up front so
-# nothing ever links against them.
-# libevdev.so* is removed for the same reason: install_dependencies.sh builds
-# a static libevdev, but the sysroot also ships a prebuilt libevdev.so.2 that
-# the linker would otherwise prefer.
-RUN rm -f "$SYSROOT"/usr/lib/libssl.so* "$SYSROOT"/usr/lib/libcrypto.so* \
-        "$SYSROOT"/usr/lib/libcurl.so* "$SYSROOT"/usr/lib/libevdev.so* \
+# install_dependencies.sh builds a static libevdev, but the sysroot also ships
+# a prebuilt libevdev.so.2 that the linker would otherwise prefer; remove it so
+# the static archive is used.
+RUN rm -f "$SYSROOT"/usr/lib/libevdev.so* \
     && ./install_dependencies.sh
