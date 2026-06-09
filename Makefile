@@ -7,6 +7,10 @@ MAKEFILE_DIR ?= $(dir $(MAKEFILE_PATH))
 BUILD_DIR ?= build
 export BUILD_DIR
 INSTALL_DESTINATION ?= 10.11.99.1
+# Installed app directory (where the Vellum package deploys netsurf). make install
+# deploys here so it matches production and never writes the divergent ~/.netsurf,
+# which (being first in NETSURF_FB_RESPATH) would otherwise shadow shipped resources.
+APP_DIR ?= /home/root/xovi/exthome/appload/netsurf
 IMAGE_TAG ?= latest
 CLANGD_CONTAINER ?= netsurf-clangd
 
@@ -67,18 +71,20 @@ uninstall: remove-resources remove-binary ## Uninstall binary and resources from
 image: ## Build the Docker image that is used for building netsurf
 	docker build -t netsurf-build:$(IMAGE_TAG) .
 
-copy-resources: ## Copy resources to device
-	scp -r $(BUILD_DIR)/netsurf/frontends/framebuffer/res root@$(INSTALL_DESTINATION):/home/root/.netsurf/
-	scp example/Choices root@$(INSTALL_DESTINATION):/home/root/.netsurf/
+copy-resources: ## Copy resources into the installed app dir
+	ssh root@$(INSTALL_DESTINATION) "mkdir -p $(APP_DIR)/res"
+	scp -r $(BUILD_DIR)/netsurf/frontends/framebuffer/res/* root@$(INSTALL_DESTINATION):$(APP_DIR)/res/
+	scp example/Choices root@$(INSTALL_DESTINATION):$(APP_DIR)/res/Choices
 
-copy-binary: ## Copy binary to device
-	scp $(BUILD_DIR)/netsurf/nsfb root@$(INSTALL_DESTINATION):/home/root/netsurf
+copy-binary: ## Copy binary into the installed app dir (backs up the existing one)
+	ssh root@$(INSTALL_DESTINATION) '[ -e $(APP_DIR)/netsurf ] && cp -a $(APP_DIR)/netsurf $(APP_DIR)/netsurf.bak || true'
+	scp $(BUILD_DIR)/netsurf/nsfb root@$(INSTALL_DESTINATION):$(APP_DIR)/netsurf
 
-remove-resources: ## Remove resources from device
-	ssh root@$(INSTALL_DESTINATION) rm -rf /home/root/.netsurf
+remove-resources: ## Resources are provided by the Vellum package; nothing to remove
+	@echo "Resources are managed by the Vellum package; nothing to remove."
 
-remove-binary: ## Remove binary from device
-	ssh root@$(INSTALL_DESTINATION) rm -f /home/root/netsurf
+remove-binary: ## Restore the binary backup made by copy-binary
+	ssh root@$(INSTALL_DESTINATION) '[ -e $(APP_DIR)/netsurf.bak ] && mv $(APP_DIR)/netsurf.bak $(APP_DIR)/netsurf || echo "no backup to restore"'
 
 checkout: clean ## [Dev] Clean build directory and check out HEAD of forked repositories
 	scripts/setup_local_development.sh head

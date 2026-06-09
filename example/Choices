@@ -5,17 +5,17 @@ fb_xochitl_restart_command:systemctl restart remux
 scale:150
 enable_javascript:0
 
-fb_face_sans_serif:/opt/share/fonts/ttf-dejavu/DejaVuSans.ttf
-fb_face_sans_serif_bold:/opt/share/fonts/ttf-dejavu/DejaVuSans-Bold.ttf
-fb_face_sans_serif_italic:/opt/share/fonts/ttf-dejavu/DejaVuSans-Oblique.ttf
-fb_face_sans_serif_italic_bold:/opt/share/fonts/ttf-dejavu/DejaVuSans-BoldOblique.ttf
-fb_face_serif:/opt/share/fonts/ttf-dejavu/DejaVuSansMono.ttf
-fb_face_serif_bold:/opt/share/fonts/ttf-dejavu/DejaVuSerif-Bold.ttf
-fb_face_cursive:/opt/share/fonts/ttf-dejavu/DejaVuSerif-Italic.ttf
-fb_face_monospace:/opt/share/fonts/ttf-dejavu/DejaVuSansMono.ttf
-fb_face_monospace_bold:/opt/share/fonts/ttf-dejavu/DejaVuSansMono-Bold.ttf
-fb_face_fantasy:/opt/share/fonts/ttf-dejavu/DejaVuSans-Oblique.ttf
-fb_face_cjk:NotoSansCJKsc-Regular.otf
+fb_face_sans_serif:/home/root/xovi/exthome/appload/netsurf/res/fonts/DejaVuSans.ttf
+fb_face_sans_serif_bold:/home/root/xovi/exthome/appload/netsurf/res/fonts/DejaVuSans-Bold.ttf
+fb_face_sans_serif_italic:/home/root/xovi/exthome/appload/netsurf/res/fonts/DejaVuSans-Oblique.ttf
+fb_face_sans_serif_italic_bold:/home/root/xovi/exthome/appload/netsurf/res/fonts/DejaVuSans-BoldOblique.ttf
+fb_face_serif:/home/root/xovi/exthome/appload/netsurf/res/fonts/DejaVuSansMono.ttf
+fb_face_serif_bold:/home/root/xovi/exthome/appload/netsurf/res/fonts/DejaVuSerif-Bold.ttf
+fb_face_cursive:/home/root/xovi/exthome/appload/netsurf/res/fonts/DejaVuSerif-Italic.ttf
+fb_face_monospace:/home/root/xovi/exthome/appload/netsurf/res/fonts/DejaVuSansMono.ttf
+fb_face_monospace_bold:/home/root/xovi/exthome/appload/netsurf/res/fonts/DejaVuSansMono-Bold.ttf
+fb_face_fantasy:/home/root/xovi/exthome/appload/netsurf/res/fonts/DejaVuSans-Oblique.ttf
+fb_face_cjk:/home/root/xovi/exthome/appload/netsurf/res/fonts/NotoSansCJKsc-Regular.otf
 
 fb_toolbar_size:60
 fb_furniture_size:40
