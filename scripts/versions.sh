@@ -21,4 +21,4 @@ LIBNSFB_REPOSITORY="https://github.com/MaicroNotHard/libnsfb-reMarkable"
 LIBNSFB_VERSION="af3e4739afadd518aaa3098b049cebd9d35e263b"
 
 NETSURF_REPOSITORY="https://github.com/MaicroNotHard/netsurf-base-reMarkable"
-NETSURF_VERSION="d6c5c1a0e7f466b30e3bf7a77c406d0c4a6f56bf"
+NETSURF_VERSION="5e97fc9d6511c0ed6ebb120e2f4959b78e2f8493"
