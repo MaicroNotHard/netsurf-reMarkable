@@ -31,6 +31,7 @@ cd /tmp
 
 # --- libwebp 1.4.0 (autotools, decoder) ---
 curl -L "https://storage.googleapis.com/downloads.webmproject.org/releases/webp/libwebp-1.4.0.tar.gz" -o libwebp.tar.gz
+echo "61f873ec69e3be1b99535634340d5bde750b2e4447caa1db9f61be3fd49ab1e5  libwebp.tar.gz" | sha256sum -c
 mkdir -p libwebp && tar --strip-components=1 -C libwebp -xf libwebp.tar.gz && rm libwebp.tar.gz
 cd libwebp
 ./configure --host="$CHOST" --prefix="$PREFIX" --enable-static --disable-shared \
@@ -42,12 +43,14 @@ cd /tmp && rm -rf libwebp
 
 # --- brotli 1.1.0 (cmake, static; libjxl dep) ---
 curl -L "https://github.com/google/brotli/archive/refs/tags/v1.1.0.tar.gz" -o brotli.tar.gz
+echo "e720a6ca29428b803f4ad165371771f5398faba397edf6778837a18599ea13ff  brotli.tar.gz" | sha256sum -c
 mkdir -p brotli && tar --strip-components=1 -C brotli -xf brotli.tar.gz && rm brotli.tar.gz
 cmake_build brotli -DBROTLI_DISABLE_TESTS=ON
 rm -rf brotli
 
 # --- highway 1.2.0 (cmake, static; libjxl dep) ---
 curl -L "https://github.com/google/highway/archive/refs/tags/1.2.0.tar.gz" -o hwy.tar.gz
+echo "7e0be78b8318e8bdbf6fa545d2ecb4c90f947df03f7aadc42c1967f019e63343  hwy.tar.gz" | sha256sum -c
 mkdir -p highway && tar --strip-components=1 -C highway -xf hwy.tar.gz && rm hwy.tar.gz
 cmake_build highway -DHWY_ENABLE_TESTS=OFF -DHWY_ENABLE_EXAMPLES=OFF \
   -DHWY_ENABLE_CONTRIB=OFF -DHWY_ENABLE_INSTALL=ON
