@@ -23,3 +23,10 @@ ADD scripts/install_dependencies.sh install_dependencies.sh
 # the static archive is used.
 RUN rm -f "$SYSROOT"/usr/lib/libevdev.so* \
     && ./install_dependencies.sh
+
+# Optional image-format libs gained by latest upstream NetSurf (WEBP, JPEG-XL).
+# Separate layer so the base-deps layer above stays cached. libwebp + libjxl
+# (+ its static deps highway/brotli) are cross-built static; the device ships
+# neither, so they are baked into nsfb (libstdc++/libgcc_s stay dynamic).
+ADD scripts/install_image_libs.sh install_image_libs.sh
+RUN ./install_image_libs.sh

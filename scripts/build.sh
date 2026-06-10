@@ -18,6 +18,8 @@ source $SCRIPTPATH/env.sh
 
 # Required so the netsurf make picks up the previously built libraries
 export CFLAGS="$CFLAGS -I$TARGET_WORKSPACE/inst-$HOST/include"
+# upstream idna.c switched to <utf8proc.h>; NetSurf libutf8proc mirror installs it under include/libutf8proc/
+export CFLAGS="$CFLAGS -I$TARGET_WORKSPACE/inst-$HOST/include/libutf8proc"
 export LDFLAGS="$LDFLAGS -L$TARGET_WORKSPACE/inst-$HOST/lib" 
 # freetype libs end up in /usr/local, so include that for pkg-config
 export PKG_CONFIG_LIBDIR="$PKG_CONFIG_LIBDIR:$SYSROOT/usr/local/lib/pkgconfig"
@@ -38,6 +40,12 @@ cd $TARGET_WORKSPACE/netsurf/
 # the link fails with undefined references to libevdev_* now that libevdev is
 # statically linked rather than resolved from a shared lib.
 export LDFLAGS="$LDFLAGS -Wl,--whole-archive -levdev -Wl,--no-whole-archive -lpthread"
+
+# WebP + JPEG-XL are statically linked from the sysroot. NetSurf calls pkg-config
+# without --static, so only -lwebp / -ljxl are emitted; spell out the transitive
+# static deps here. --start-group resolves the jxl<->hwy<->brotli<->skcms cross-refs.
+# libstdc++ / libgcc_s are present on the device, so they stay dynamic.
+export LDFLAGS="$LDFLAGS -Wl,--start-group -ljxl -ljxl_cms -lhwy -lbrotlienc -lbrotlidec -lbrotlicommon -lsharpyuv -Wl,--end-group -lstdc++"
 
 export CC="arm-remarkable-linux-gnueabihf-gcc"
 export STRIP="arm-remarkable-linux-gnueabihf-strip"
