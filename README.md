@@ -1,13 +1,36 @@
-# NetSurf-reMarkable [![Build for reMarkable](https://github.com/alex0809/netsurf-reMarkable/actions/workflows/build.yml/badge.svg)](https://github.com/alex0809/netsurf-reMarkable/actions/workflows/build.yml)[![rm1](https://img.shields.io/badge/rM1-supported-green)](https://remarkable.com/store/remarkable)[![rm2](https://img.shields.io/badge/rM2-supported-green)](https://remarkable.com/store/remarkable-2)[![opkg](https://img.shields.io/badge/OPKG-netsurf-blue)](https://toltec-dev.org/)
+# NetSurf-reMarkable [![Build for reMarkable](https://github.com/MaicroNotHard/netsurf-reMarkable/actions/workflows/build.yml/badge.svg)](https://github.com/MaicroNotHard/netsurf-reMarkable/actions/workflows/build.yml)[![rm1](https://img.shields.io/badge/rM1-supported-green)](https://remarkable.com/store/remarkable)[![rm2](https://img.shields.io/badge/rM2-supported-green)](https://remarkable.com/store/remarkable-2)[![opkg](https://img.shields.io/badge/OPKG-netsurf-blue)](https://toltec-dev.org/)
 
-> **_NOTE:_**  I no longer own a reMarkable, so I'm not continuing to maintain this repository, as I can't validate any changes.
+> **_NOTE:_**  The original author (alex0809) no longer owns a reMarkable and is no longer maintaining the upstream repository, as they can't validate changes. This fork is maintained by MaicroNotHard.
 
 NetSurf is a lightweight and portable open-source web browser. This project adapts NetSurf for the reMarkable E Ink tablet.
 This repository contains the code for to building and releasing new versions.
 
 ## Installation
 
-### Toltec
+### Vellum (recommended)
+
+[Vellum](https://github.com/vellum-dev/vellum) is the actively maintained package manager for the reMarkable. A VELBUILD recipe for NetSurf (built from this fork, with fonts fetched from upstream DejaVu releases at build time) lives in [MaicroNotHard/vellum](https://github.com/MaicroNotHard/vellum) under `packages/netsurf`.
+
+Until the package is published in the official Vellum index, build and sideload it yourself:
+
+```
+git clone https://github.com/MaicroNotHard/vellum
+cd vellum
+./scripts/build-package.sh netsurf armv7
+```
+
+Copy the resulting `dist/armv7/netsurf-*.apk` to the device and install it with [vellum-cli](https://github.com/vellum-dev/vellum-cli):
+
+```
+scp dist/armv7/netsurf-*.apk root@10.11.99.1:/tmp/
+ssh root@10.11.99.1 /home/root/.vellum/bin/vellum add --allow-untrusted /tmp/netsurf-*.apk
+```
+
+Once the package is published in the index, installation will simply be `vellum install netsurf`.
+
+### Toltec (legacy)
+
+> **_NOTE:_** This install path predates the Vellum recipe above and has not been tested against this fork recently - it's kept here for historical reference. We recommend installing via Vellum.
 
 You can install neturf with [Toltec](https://toltec-dev.org) using the following command:
 
@@ -59,10 +82,10 @@ The resulting netsurf binary is `build/netsurf/nsfb`.
 `make install` to build and then install the updated binary to the device.
 This will use `scp` to copy the binary and required files to the device.
 Device address used is by default `10.11.99.1` (i.e. reMarkable connected to your PC via USB), but can be overridden with the `INSTALL_DESTINATION` variable.
-The netsurf binary will be copied to `~/netsurf`, and the required resources are copied to `~/.netsurf`.
+The netsurf binary and resources are copied into the installed app directory `/home/root/xovi/exthome/appload/netsurf/` (matching where the Vellum package installs them); the existing binary is backed up to `netsurf.bak`. `make uninstall` restores that backup.
 
-The font files defined in the configuration file `~/.netsurf/Choices` must exist.
-You can either install the pre-configured fonts via opkg, or copy your own preferred fonts to the device and adapt the `Choices` file.
+The font files defined in the configuration file `res/Choices` must exist on the device.
+Install the NetSurf Vellum package first so its fonts are present under the app dir's `res/fonts/`, or copy your own fonts there and adapt `Choices`.
 
 Installation of pre-configured fonts:
 ```
@@ -84,7 +107,10 @@ clangd and compile-commands set up.
 After the build is complete, you can can start the container with `make clangd-start`, and access with
 [clangd_docker.sh](scripts/clangd_docker.sh).
 
+For running a locally-built binary on the tablet and capturing before/after
+screenshots, see [docs/on-device-testing.md](docs/on-device-testing.md).
+
 ## Related repositories
 
-- [libnsfb-reMarkable](https://github.com/alex0809/libnsfb-reMarkable): fork of libnsfb with reMarkable-specific code for drawing to the screen and input handling
-- [netsurf-base-reMarkable](https://github.com/alex0809/netsurf-base-reMarkable): fork of netsurf, with modifications to make it work better on the reMarkable
+- [libnsfb-reMarkable](https://github.com/MaicroNotHard/libnsfb-reMarkable): fork of libnsfb with reMarkable-specific code for drawing to the screen and input handling
+- [netsurf](https://github.com/MaicroNotHard/netsurf): fork of netsurf-browser/netsurf, with the reMarkable framebuffer port on top

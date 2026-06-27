@@ -1,13 +1,15 @@
 #!/bin/bash
 
 # Set up script for local development.
-# This will setup the build directory by cloning libnsfb and netsurf-base
+# Clones libnsfb and the netsurf core into the build directory. The repository
+# URLs come from versions.sh so there is a single source of truth.
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+source ${SCRIPT_DIR}/versions.sh
 
 clone() {
-    git clone git@github.com:alex0809/libnsfb-reMarkable.git ${BUILD_DIR}/libnsfb
-    git clone git@github.com:alex0809/netsurf-base-reMarkable.git ${BUILD_DIR}/netsurf
+    git clone ${LIBNSFB_REPOSITORY}.git ${BUILD_DIR}/libnsfb
+    git clone ${NETSURF_REPOSITORY}.git ${BUILD_DIR}/netsurf
 }
 
 if [ -z ${BUILD_DIR} ]; then echo "BUILD_DIR must be set" && exit 1; fi
@@ -16,7 +18,6 @@ case $1 in
     versioned)
         echo "Setting up fixed versions of repositories"
         clone
-        source ${SCRIPT_DIR}/versions.sh
         pushd ${BUILD_DIR}/libnsfb
         git checkout ${LIBNSFB_VERSION}
         popd
@@ -33,4 +34,3 @@ case $1 in
         exit 1
         ;;
 esac
-
